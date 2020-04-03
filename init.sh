@@ -4,6 +4,7 @@ efk="efkpackage.tar.gz"
 md5="caab1f3677a176d652ff2419b8df142d"
 if [ -f "/root/package/${efk}" ] && [ `md5sum /root/package/${efk} |awk '{print $1}'` == ${md5} ]; then
     echo "正在将软件包copy到ansible-roles相应目录,请稍等..."
+	tar xf /root/package/${efk} -C /root/package/
     tar xf /root/package/efkpackage/es.tar.gz -C ./roles/elasticsearch/files/ && \
     tar xf /root/package/efkpackage/fluentd.tar.gz -C ./roles/fluentd/files/ && \
     cp /root/package/efkpackage/jdk-8u211-linux-x64.rpm ./roles/jdk/files/ &&\
