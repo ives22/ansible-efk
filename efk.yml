@@ -1,0 +1,18 @@
+---
+- hosts: elasticsearch
+  become: yes 
+  roles:
+    - jdk 
+    - elasticsearch
+
+
+- hosts: fluentd
+  become: yes 
+  roles: 
+    - fluentd
+
+
+- hosts: kibana
+  become: yes 
+  roles: 
+    - kibana

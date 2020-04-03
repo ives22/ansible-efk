@@ -1,0 +1,9 @@
+pge_info:
+  pge_name: elasticsearch-6.8.1.rpm
+  pge_path: /root/elasticsearch-6.8.1.rpm
+
+xm:
+  xms: Xms2g
+  xmx: Xmx2g
+
+download_dir: "/usr/local/src/"

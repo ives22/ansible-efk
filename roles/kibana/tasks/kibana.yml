@@ -1,0 +1,14 @@
+---
+- name: copy package kibana
+  copy: src={{ pge_info.pge_name }} dest={{ pge_info.pge_path }}
+
+- name: install kibana from rpm
+  yum: name={{ pge_info.pge_path }} state=installed
+
+- name: config kibana
+  template: src=kibana.yml.j2 dest=/etc/kibana/kibana.yml
+  notify: restart kibana
+
+- name: kibana service start and enabled
+  service: name=kibana state=started enabled=yes
+

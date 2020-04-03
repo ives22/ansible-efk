@@ -1,0 +1,7 @@
+- name: remove old jdk
+  yum: name=jdk* state=removed
+#  shell: "yum remove `rpm -aq |grep jdk` -y"
+
+- name: Install Package JDK
+  yum: name=/root/{{ pge_name }} state=installed
+

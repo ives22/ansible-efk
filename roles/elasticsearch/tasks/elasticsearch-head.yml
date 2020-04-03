@@ -1,0 +1,34 @@
+---
+- name: copy npm
+  copy: src=npm-3.10.10-1.6.17.1.1.el7.x86_64.rpm dest={{ download_dir }}/npm-3.10.10-1.6.17.1.1.el7.x86_64.rpm 
+
+- name: copy libuv
+  copy: src=libuv-1.34.0-1.el7.x86_64.rpm dest={{ download_dir }}/libuv-1.34.0-1.el7.x86_64.rpm
+
+- name: copy nodejs
+  copy: src=nodejs-6.17.1-1.el7.x86_64.rpm dest={{ download_dir }}/nodejs-6.17.1-1.el7.x86_64.rpm
+
+- name: copy libicu
+  copy: src=libicu-50.2-4.el7_7.x86_64.rpm dest={{ download_dir }}/libicu-50.2-4.el7_7.x86_64.rpm
+
+- name: install package npm
+  shell: "cd {{ download_dir }} && yum localinstall ./*.rpm -y"
+
+- name: copy elasticsearch-head
+  copy: src=elasticsearch-head.tar.gz dest={{ download_dir }}
+
+- name: tar xf elasticsearch-head
+  shell: "cd {{ download_dir }} && tar xf elasticsearch-head.tar.gz"
+
+- name: config elasticsearch-head startfile
+  copy: src=elasticsearch-head dest=/usr/bin/elasticsearch-head
+
+- name: config elasticsearch-head file auth
+  file: path=/usr/bin/elasticsearch-head mode=755
+
+- name: start elasticsearch-head
+  shell: "elasticsearch-head start"
+
+- name: reconfig elasticsearch
+  template: src=elasticsearch2.yml.j2 dest=/etc/elasticsearch/elasticsearch.yml
+  notify: restart elasticsearch

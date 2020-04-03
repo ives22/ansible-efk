@@ -1,0 +1,19 @@
+---
+- name: copy package elasticsearch
+  copy: src={{ pge_info.pge_name }} dest={{ pge_info.pge_path }}
+
+- name: install elasticsearch from rpm
+  yum: name={{ pge_info.pge_path }} state=installed
+
+- name: config elasticsearch
+  template: src=elasticsearch.yml.j2 dest=/etc/elasticsearch/elasticsearch.yml
+  notify: restart elasticsearch
+
+- name: config jvm
+  template: src=jvm.options.j2 dest=/etc/elasticsearch/jvm.options
+
+- name: copy systemd
+  copy: src=elasticsearch.service dest=/usr/lib/systemd/system/elasticsearch.service
+
+- name: elasticsearch service start and enabled
+  service: name=elasticsearch state=started enabled=yes

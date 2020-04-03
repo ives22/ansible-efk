@@ -1,0 +1,2 @@
+- name: Copy Package JDK
+  copy: src={{ pge_name }} dest=/root/

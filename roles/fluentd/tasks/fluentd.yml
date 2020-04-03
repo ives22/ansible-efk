@@ -1,0 +1,31 @@
+---
+- name: copy package td-agent
+  copy: src={{ pge_info.pge_name }} dest={{ pge_info.pge_path }}
+
+- name: copy td-agent depend package
+  copy: src=package.tar.gz dest=/root/
+
+- name: tar xf td-agent depend
+  unarchive: src=/root/package.tar.gz dest=/root/
+
+- name: install td-agent depend package
+  shell: "cd package && yum localinstall ./*.rpm -y"
+
+- name: install td-agent from rpm
+  yum: name={{ pge_info.pge_path }} state=installed
+
+- name: config td-agent
+  template: src=td-agent.conf.j2 dest=/etc/td-agent/td-agent.conf
+  notify: restart td-agent
+
+- name: copy td-agent plugin
+  copy: src=td-agent-plugin.tar.gz dest=/root/
+
+- name: tar xf td-agent-plugin
+  shell: "cd /root/  && tar xf td-agent-plugin.tar.gz"
+
+- name: install td-agent plugin
+  shell: "/usr/sbin/td-agent-gem install /root/td-agent-plugin/fluent-plugin-elasticsearch-4.0.7.gem && /usr/sbin/td-agent-gem install /root/td-agent-plugin/fluent-plugin-typecast-0.2.0.gem && /usr/sbin/td-agent-gem install /root/td-agent-plugin/resolve-hostname-0.1.0.gem && /usr/sbin/td-agent-gem install /root/td-agent-plugin/proxifier-1.0.3.gem && /usr/sbin/td-agent-gem install /root/td-agent-plugin/fluent-plugin-secure-forward-0.4.5.gem"
+
+- name: td-agent service start and enabled
+  service: name=td-agent state=started enabled=yes
